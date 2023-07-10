@@ -1,0 +1,21 @@
+using System;
+using System.Text;
+
+public class Solution {
+    public string solution(int N) {
+        StringBuilder result = new StringBuilder();
+        Random random = new Random();
+
+        while (N > 0) {
+            int randomCount = random.Next(1, N + 1); // Generate a random count between 1 and N (inclusive)
+            char letter = (char)(random.Next(26) + 'a'); // Generate a random lowercase letter
+
+            for (int i = 0; i < randomCount; i++) {
+                result.Append(letter);
+                N--; // Decrease the remaining count of letters
+            }
+        }
+
+        return result.ToString();
+    }
+}

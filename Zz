@@ -1,0 +1,160 @@
+echo "# Proj" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Zain35145/Proj.git
+git push -u origin main
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace TextAnalyzer
+{
+    class Program
+    {
+        static Dictionary<string, int> WordFrequencyAnalysis(string sentence)
+        {
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, int> wordFreq = new Dictionary<string, int>();
+            foreach (string word in words)
+            {
+                if (wordFreq.ContainsKey(word))
+                    wordFreq[word]++;
+                else
+                    wordFreq[word] = 1;
+            }
+            return wordFreq;
+        }
+
+        static List<string> SentenceMaker(string[] words, int numSentences)
+        {
+            Random random = new Random();
+            List<string> sentences = new List<string>();
+            for (int i = 0; i < numSentences; i++)
+            {
+                string sentence = string.Join(" ", words.OrderBy(x => random.Next()).Take(5));
+                sentences.Add(sentence);
+            }
+            return sentences;
+        }
+
+        static (List<string> longestWords, List<string> shortestWords) LongestShortestWordFinder(string sentence)
+        {
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            int maxLength = words.Max(w => w.Length);
+            int minLength = words.Min(w => w.Length);
+            List<string> longestWords = words.Where(w => w.Length == maxLength).ToList();
+            List<string> shortestWords = words.Where(w => w.Length == minLength).ToList();
+            return (longestWords, shortestWords);
+        }
+
+        static string WordSearch(string sentence, string word)
+        {
+            int wordCount = sentence.ToLower().Split(' ').Count(w => w == word.ToLower());
+            if (wordCount > 0)
+                return $"The word \"{word}\" appears {wordCount} time(s) in the sentence.";
+            else
+                return $"The word \"{word}\" does not exist in the sentence.";
+        }
+
+        static List<string> PalindromeDetector(string sentence)
+        {
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            List<string> palindromicWords = new List<string>();
+            foreach (string word in words)
+            {
+                string reversedWord = new string(word.Reverse().ToArray());
+                if (string.Equals(word, reversedWord, StringComparison.OrdinalIgnoreCase))
+                    palindromicWords.Add(word);
+            }
+            return palindromicWords;
+        }
+
+        static Dictionary<string, (int vowels, int consonants)> VowelConsonantCounter(string sentence)
+        {
+            char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, (int vowels, int consonants)> countResult = new Dictionary<string, (int vowels, int consonants)>();
+            foreach (string word in words)
+            {
+                int vowelCount = word.ToLower().Count(c => vowels.Contains(c));
+                int consonantCount = word.Length - vowelCount;
+                countResult[word] = (vowelCount, consonantCount);
+            }
+            return countResult;
+        }
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter a sentence:");
+            string sentence = Console.ReadLine();
+
+            // 1) Word Frequency Analysis
+            Dictionary<string, int> wordFreq = WordFrequencyAnalysis(sentence);
+            Console.WriteLine("\nWord Frequency Analysis:");
+            foreach (var pair in wordFreq)
+            {
+                Console.WriteLine($"\"{pair.Key}\": {pair.Value}");
+            }
+
+            // 2) Sentence Maker
+            Console.WriteLine("\nEnter a number N:");
+            int numSentences = int.Parse(Console.ReadLine());
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            List<string> sentences = SentenceMaker(words, numSentences);
+            Console.WriteLine("\nGenerated Sentences:");
+            for (int i = 0; i < sentences.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {sentences[i]}");
+            }
+
+            // 3) Longest and Shortest Word Finder
+            (List<string> longestWords, List<string> shortestWords) = LongestShortestWordFinder(sentence);
+            Console.WriteLine("\nLongest word(s):");
+            foreach (string word in longestWords)
+            {
+                Console.WriteLine($"\"{word}\"");
+            }
+            Console.WriteLine("\nShortest word(s):");
+            foreach (string word in shortestWords)
+            {
+                Console.WriteLine($"\"{word}\"");
+            }
+
+            // 4) Word Search
+            Console.WriteLine("\nEnter a word to search:");
+            string searchWord = Console.ReadLine();
+            string searchResult = WordSearch(sentence, searchWord);
+            Console.WriteLine("\nWord Search:");
+            Console.WriteLine(searchResult);
+
+            // 5) Palindrome Detector
+            List<string> palindromicWords = PalindromeDetector(sentence);
+            Console.WriteLine("\nPalindrome Detector:");
+            if (palindromicWords.Count > 0)
+            {
+                foreach (string word in palindromicWords)
+                {
+                    Console.WriteLine($"\"{word}\"");
+                }
+            }
+            else
+            {
+                Console.WriteLine("There are no palindromic words in the sentence.");
+            }
+
+            // 6) Vowel/Consonant Counter
+            Dictionary<string, (int vowels, int consonants)> countResult = VowelConsonantCounter(sentence);
+            Console.WriteLine("\nVowel/Consonant Counter:");
+            foreach (var pair in countResult)
+            {
+                Console.WriteLine($"\"{pair.Key}\": {pair.Value.vowels} vowel(s) and {pair.Value.consonants} consonant(s)");
+            }
+
+            Console.ReadLine();
+        }
+    }
+}

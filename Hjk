@@ -1,0 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+public class Solution {
+    public string solution(int N) {
+        if (N % 2 == 0)
+            N--;
+
+        List<char> letters = new List<char>();
+        for (char c = 'a'; c <= 'z'; c++) {
+            letters.Add(c);
+        }
+
+        StringBuilder result = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < N; i++) {
+            int randomIndex = random.Next(letters.Count);
+            char letter = letters[randomIndex];
+            result.Append(letter);
+        }
+
+        return result.ToString();
+    }
+}

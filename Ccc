@@ -1,0 +1,21 @@
+public class Solution {
+    public int solution(string S) {
+        int up = 0, down = 0, left = 0, right = 0;
+        
+        foreach (char c in S) {
+            if (c == '^')
+                up++;
+            else if (c == 'v')
+                down++;
+            else if (c == '<')
+                left++;
+            else if (c == '>')
+                right++;
+        }
+        
+        int totalCount = up + down + left + right;
+        int maxCount = Math.Max(Math.Max(up, down), Math.Max(left, right));
+        
+        return totalCount - maxCount;
+    }
+}

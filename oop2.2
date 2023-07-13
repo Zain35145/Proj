@@ -1,0 +1,177 @@
+
+using System;
+using System.Collections.Generic;
+//create an interface named ITransaction
+// An interface defines objects or methods
+//that are must to be defined in the class
+
+interface ITransaction
+{
+    void ExecuteTransaction(decimal amount);
+    void PrintTransaction();
+}
+
+abstract class BankAccount : ITransaction
+{
+    private static int accountCount = 0;
+
+    public string AccountNumber { get; }
+    public string AccountHolder { get; }
+    protected decimal Balance { get; set; }
+
+    public BankAccount(string accountHolder)
+    {
+        AccountNumber = GenerateAccountNumber();
+        AccountHolder = accountHolder;
+        Balance = 0;
+    }
+
+    private string GenerateAccountNumber()
+    {
+        accountCount++;
+        return "ACC" + accountCount.ToString().PadLeft(4, '0');
+    }
+
+    public virtual void Deposit(decimal amount)
+    {
+        if (amount > 0)
+        {
+            Balance += amount;
+            Console.WriteLine($"Deposited {amount:C} into Account {AccountNumber}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid deposit amount.");
+        }
+    }
+
+    public virtual void Withdraw(decimal amount)
+    {
+        if (amount > 0 && amount <= Balance)
+        {
+            Balance -= amount;
+            Console.WriteLine($"Withdrawn {amount:C} from Account {AccountNumber}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid withdrawal amount or insufficient balance.");
+        }
+    }
+
+    public void PrintTransaction()
+    {
+        Console.WriteLine($"Account Number: {AccountNumber}");
+        Console.WriteLine($"Account Holder: {AccountHolder}");
+        Console.WriteLine($"Balance: {Balance:C}");
+    }
+
+    public abstract void ExecuteTransaction(decimal amount);
+}
+
+class SavingsAccount : BankAccount
+{
+    private decimal interestRate;
+
+    public SavingsAccount(string accountHolder, decimal interestRate)
+        : base(accountHolder)
+    {
+        this.interestRate = interestRate;
+    }
+
+    public override void Deposit(decimal amount)
+    {
+        base.Deposit(amount);
+        CalculateInterest();
+    }
+
+    public override void ExecuteTransaction(decimal amount)
+    {
+        Deposit(amount);
+    }
+
+    private void CalculateInterest()
+    {
+        decimal interest = Balance * interestRate / 100;
+        Balance += interest;
+        Console.WriteLine($"Interest added to Account {AccountNumber}: {interest:C}");
+    }
+}
+
+class CheckingAccount : BankAccount
+{
+    public CheckingAccount(string accountHolder)
+        : base(accountHolder)
+    {
+    }
+
+    public override void ExecuteTransaction(decimal amount)
+    {
+        Withdraw(amount);
+    }
+}
+
+class Bank
+{
+    private List<BankAccount> accounts;
+
+    public Bank()
+    {
+        accounts = new List<BankAccount>();
+    }
+
+    public void AddAccount(BankAccount account)
+    {
+        accounts.Add(account);
+        Console.WriteLine($"Account {account.AccountNumber} added to the bank.");
+    }
+
+    public void ProcessTransaction(string accountNumber, decimal amount)
+    {
+        BankAccount account = FindAccount(accountNumber);
+        if (account != null)
+        {
+            account.ExecuteTransaction(amount);
+        }
+        else
+        {
+            Console.WriteLine("Account not found.");
+        }
+    }
+
+    private BankAccount FindAccount(string accountNumber)
+    {
+        foreach (BankAccount account in accounts)
+        {
+            if (account.AccountNumber == accountNumber)
+            {
+                return account;
+            }
+        }
+        return null;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Bank bank = new Bank();
+
+        SavingsAccount savingsAccount = new SavingsAccount("Zain-ul-Hassan", 2.5m);
+        CheckingAccount checkingAccount = new CheckingAccount("Jawad Haider");
+
+        bank.AddAccount(savingsAccount);
+        bank.AddAccount(checkingAccount);
+
+        savingsAccount.Deposit(1000);
+        checkingAccount.Deposit(500);
+
+        bank.ProcessTransaction(savingsAccount.AccountNumber, 200);
+        bank.ProcessTransaction(checkingAccount.AccountNumber, 1000);
+
+        savingsAccount.PrintTransaction();
+        checkingAccount.PrintTransaction();
+
+        Console.ReadLine();
+    }
+}

@@ -1,0 +1,169 @@
+using System;
+using System.Collections.Generic;
+
+interface IBankAccount       //Craete an interface class IBankAccount
+{
+    void Deposit(decimal amount);       //Defining the methods Deposit and Withdrae
+    void Withdraw(decimal amount);  
+}
+
+abstract class BankAccount : IBankAccount    //Abstract class BankAccount implementing IBankAccount interface
+
+{
+    //attributes and methods of class bank account
+    public string AccountNumber { get; }
+    public string AccountHolder { get; }
+    public decimal Balance { get; protected set; }
+
+    public BankAccount(string accountNumber, string accountHolder, decimal balance = 0)
+    {
+        AccountNumber = accountNumber;
+        AccountHolder = accountHolder;
+        Balance = balance;
+    }
+    //Deposit and Withdraw classes are defined as abstract classes so they are defined in the subclasses as well
+    public abstract void Deposit(decimal amount);
+
+    public abstract void Withdraw(decimal amount);
+
+    public void DisplayAccountInfo()
+    {
+        Console.WriteLine($"Account Number: {AccountNumber}");
+        Console.WriteLine($"Account Holder: {AccountHolder}");
+        Console.WriteLine($"Balance: {Balance}");
+    }
+}
+// Savings account is the subclass of BankAccount
+class SavingsAccount : BankAccount
+{
+    public decimal InterestRate { get; }
+    // This class is over riding its parent class with a new method interest rate
+    public SavingsAccount(string accountNumber, string accountHolder, decimal interestRate, decimal balance = 0)
+        : base(accountNumber, accountHolder, balance)
+    {
+        InterestRate = interestRate;
+    }
+    // Deposit method is overridden and intereset rate is also calculated through it 
+    public override void Deposit(decimal amount)
+    {
+        decimal interest = amount * (InterestRate / 100);
+        Balance += amount + interest;
+    }
+    // Withdraw method is called but it is not allowed in saving accounts
+    public override void Withdraw(decimal amount)
+    {
+        Console.WriteLine("Withdrawal not allowed from a savings account.");
+    }
+}
+// CheckingAccount is now the child class of BankAccount
+class CheckingAccount : BankAccount
+{
+    // the methods and attributes of parent class are called
+    public CheckingAccount(string accountNumber, string accountHolder, decimal balance = 0)
+        : base(accountNumber, accountHolder, balance)
+    {
+    }
+    // Deposit and Withdraw method from interface are overridden here 
+    public override void Deposit(decimal amount)
+    {
+        Balance += amount;
+    }
+
+    public override void Withdraw(decimal amount)
+    {
+        if (amount <= Balance)
+        {
+            Balance -= amount;
+        }
+        else
+        {
+            Console.WriteLine("Insufficient balance.");
+        }
+    }
+}
+// Bank class is defined which manages multiple accounts with ceratin methods
+class Bank
+{
+    private List<BankAccount> accounts;
+
+    public Bank()
+    {
+        accounts = new List<BankAccount>();
+    }
+    // Addaccount helps the user to add a new account
+    public void AddAccount(BankAccount account)
+    {
+        accounts.Add(account);
+    }
+    // This is checking some conditions and then having deposit 
+    public void DepositToAccount(string accountNumber, decimal amount)
+    {
+        BankAccount account = FindAccount(accountNumber);
+        if (account != null)
+        {
+            account.Deposit(amount);
+        }
+        else
+        {
+            Console.WriteLine("Account not found.");
+        }
+    }
+    // It is also checking if account is null or not and if not null then allowing withdrawal
+    public void WithdrawFromAccount(string accountNumber, decimal amount)
+    {
+        BankAccount account = FindAccount(accountNumber);
+        if (account != null)
+        {
+            account.Withdraw(amount);
+        }
+        else
+        {
+            Console.WriteLine("Account not found.");
+        }
+    }
+    // it helps in finding account im the bank
+    private BankAccount FindAccount(string accountNumber)
+    {
+        foreach (BankAccount account in accounts)
+        {
+            if (account.AccountNumber == accountNumber)
+            {
+                return account;
+            }
+        }
+        return null;
+    }
+}
+
+class Program
+{
+    // Imnplemenation of the methods defined and
+    // adding accounts as well
+    static void Main(string[] args)
+    {
+        // a new Bank object named bank is created 
+        Bank bank = new Bank();
+        // SavingAccount object savingAccount is created 
+        //CheckingAccount object checkingAccount is created
+        //instances of the SavingAccount and CheckingAccount is called and interest rate is given 
+        //in case of savingsAccount
+
+        SavingsAccount savingsAccount = new SavingsAccount("SA001", "Zain-ul-Hassan", 2.5m);
+        CheckingAccount checkingAccount = new CheckingAccount("CA001", "Jawad Haider");
+        //The AddAccount method of the class Bank is called 
+        //to add savingsAccount and checkingAccount to the bank object
+        bank.AddAccount(savingsAccount);
+        bank.AddAccount(checkingAccount);
+        //the Deposit Method of the relevant account is called to add amount in the account
+        savingsAccount.Deposit(1000);
+        checkingAccount.Deposit(500);
+        // Here the method DepositToAccount and WithdrawFromAccount is called
+        bank.DepositToAccount("SA001", 200);
+        bank.WithdrawFromAccount("CA001", 1000);
+        // Account info of both accounts are displayed
+        savingsAccount.DisplayAccountInfo();
+        checkingAccount.DisplayAccountInfo();
+        // the program waits for the user to press enter key
+        Console.ReadLine();
+    }
+}

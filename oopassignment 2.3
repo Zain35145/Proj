@@ -1,0 +1,214 @@
+using System;
+using System.Collections.Generic;
+// Defining the interface
+interface ITransaction
+{
+    //Defining the ExecuteTransaction and PrintTransaction methods inside the interface
+    void ExecuteTransaction(decimal amount);
+    void PrintTransaction();
+}
+// making the abstract class BankAccount and implememting the ITransaction interface
+abstract class BankAccount : ITransaction
+{
+    private static int accountCount = 0;
+
+    public string AccountNumber { get; }
+    public string AccountHolder { get; }
+    //Protected can be accessed from the child classes and ensuring encapsulation 
+    protected decimal Balance { get; set; }
+
+    //Generating the account number and making it four digit by padding to left with 0
+    private string GenerateAccountNumber()
+    {
+        accountCount++;
+        return "ACC" + accountCount.ToString().PadLeft(4, '0');
+    }
+    // Here we are defining the constructor of bank avvount class. It initializes the BankAccount oject by 
+    //Assigning the generated account number, Providing the name of account holder as a string, and then 
+    //initializing the balance to zero
+    public BankAccount(string accountHolder)
+    {
+        AccountNumber = GenerateAccountNumber();
+        AccountHolder = accountHolder;
+        Balance = 0;
+    }
+    //Here we are calling the virual Deposit method which means it derived classes can use this method 
+    // It checks if the amount is greater than zero , the amount is added to the  balance otherwise
+    //it displays the relevant message that the amount isnot valid to be added
+    
+    public virtual void Deposit(decimal amount)
+    {
+        if (amount > 0)
+        {
+            Balance += amount;
+            Console.WriteLine($"Deposited {amount:C} into Account {AccountNumber}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid deposit amount.");
+        }
+    }
+    //similar to the virtual Deposit method here we are defining the Withdraw method 
+    // It checks if the withdrawal amount is greater than zero and less than the current balance then the
+    //Withdrawal is allowed otherewise it shows the relevant message
+
+    public virtual void Withdraw(decimal amount)
+    {
+        if (amount > 0 && amount <= Balance)
+        {
+            Balance -= amount;
+            Console.WriteLine($"Withdrawn {amount:C} from Account {AccountNumber}");
+        }
+        else
+        {
+            Console.WriteLine("Invalid withdrawal amount or insufficient balance.");
+        }
+    }//JHere we are implementing the interface method PrintTransaction which 
+    //Dispalys AccountNumber , AccountHolder and Thh Balance present
+    public void PrintTransaction()
+    {
+        Console.WriteLine($"Account Number: {AccountNumber}");
+        Console.WriteLine($"Account Holder: {AccountHolder}");
+        Console.WriteLine($"Balance: {Balance:C}");
+    }
+
+
+//The ExecuteTransaction Method is devlared as abstract means the derived classes for it
+//must implement this method 
+    public abstract void ExecuteTransaction(decimal amount);
+}
+//here we are defining the child class of BankAccount known as SavingsAccopunt
+//It has an additional member interestRate which represents the interest rate 
+//Base(accountHolder) passes the account holder name to the class
+class SavingsAccount : BankAccount
+{
+    private decimal interestRate;
+
+    public SavingsAccount(string accountHolder, decimal interestRate)
+        : base(accountHolder)
+    {
+        this.interestRate = interestRate;
+    }
+
+    //The Deposit method is savings account is overriding the Deposit Method of the base class
+    //and then is calculating the interest to the amount
+    public override void Deposit(decimal amount)
+    {
+        base.Deposit(amount);
+        CalculateInterest();
+    }
+
+
+    // the ExecuteTransaction method here is oveririding the abstract ExecuteTransaction method
+    public override void ExecuteTransaction(decimal amount)
+    {
+        Deposit(amount);
+    }
+    //Here we are calculating the interest rate for omnly saving account by declaring it a private method 
+    private void CalculateInterest()
+    {
+        decimal interest = Balance * interestRate / 100;
+        Balance += interest;
+        Console.WriteLine($"Interest added to Account {AccountNumber}: {interest:C}");
+    }
+}
+//here we are creating another class CheckingAccount from the  base class
+class CheckingAccount : BankAccount
+{ 
+    //The constructor of CheckingAccount class has accountHolder as a parameter
+    //and calling the base class accountHolder name ensuring the account holder name 
+    //initialization is proper
+    public CheckingAccount(string accountHolder)
+        : base(accountHolder)
+    {
+    }
+    //The ExecuteTransaction is again overridden and calling the withdrawal method
+    //for implementing the the withdrawal
+    public override void ExecuteTransaction(decimal amount)
+    {
+        Withdraw(amount);
+    }
+}
+//Here we are creating a BankClass which will deal with multiple accountts
+class Bank
+{
+    //we are creating a private list of BankAccounts inside the Bank class
+    private List<BankAccount> accounts;
+    //the constructor is initializing the new accounts list as a new instance
+    public Bank()
+    {
+        accounts = new List<BankAccount>();
+    }
+    // The AddAccount is taking BankAccount object as a parameter and is then adding to list of accounts
+    //and is displayong a relevant message that the account has been added 
+    public void AddAccount(BankAccount account)
+    {
+        accounts.Add(account);
+        Console.WriteLine($"Account {account.AccountNumber} added to the bank.");
+    }
+
+    //This method is taking accountNumber and amount as a parameter 
+    //it nfinds the BankAccount object using the FindAccount method 
+    //if accpunt is found it calls the executes the transaction otherwise it displays the relevant message that 
+    //account is not found
+    public void ProcessTransaction(string accountNumber, decimal amount)
+    {
+        BankAccount account = FindAccount(accountNumber);
+        if (account != null)
+        {
+            account.ExecuteTransaction(amount);
+        }
+        else
+        {
+            Console.WriteLine("Account not found.");
+        }
+    }
+    // it is a private method defined inside the Bank Class it iterates through 
+    //the list that we created and check if the account is exisiting or not 
+    private BankAccount FindAccount(string accountNumber)
+    {
+        foreach (BankAccount account in accounts)
+        {
+            if (account.AccountNumber == accountNumber)
+            {
+                return account;
+            }
+        }
+        return null;
+    }
+}
+// the class program is defined 
+//the Mian method is serving as an entry point to the program 
+class Program
+{
+    static void Main(string[] args)
+    {
+        // a new Bank object named bank is created 
+        Bank bank = new Bank();
+        // SavingAccount object savingAccount is created 
+        //CheckingAccount object checkingAccount is created
+        //instances of the SavingAccount and CheckingAccount is called and interest rate is given 
+        //in case of savingsAccount
+        SavingsAccount savingsAccount = new SavingsAccount("Zain-ul-Hassan", 2.5m);
+        CheckingAccount checkingAccount = new CheckingAccount("Jawad Haider");
+        //The AddAccount method of the class Bank is called 
+        //to add savingsAccount and checkingAccount to the bank object
+        bank.AddAccount(savingsAccount);
+        bank.AddAccount(checkingAccount);
+        //the Deposit Method of the relevant account is called to add amount in the account
+        savingsAccount.Deposit(1000);
+        checkingAccount.Deposit(500);
+        // The ProcessTransaction Method of the Bank Class is called to execute 
+        //Transaction of $200 and $1000 dollars are done from savingAccount 
+        //and checkingAccount is done respectively
+        bank.ProcessTransaction(savingsAccount.AccountNumber, 200);
+        bank.ProcessTransaction(checkingAccount.AccountNumber, 1000);
+        //The printTransaction of both the classes are called to
+        //display the relevant information
+        savingsAccount.PrintTransaction();
+        checkingAccount.PrintTransaction();
+        //The program wauts for the user to press enter key before it finishes 
+
+        Console.ReadLine();
+    }
+}

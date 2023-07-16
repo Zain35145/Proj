@@ -1,0 +1,211 @@
+
+using System;
+
+namespace assign1._1
+
+
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //task 1
+            // this task returns Hello World
+            Console.WriteLine("Hello World!");
+            Name();
+            sum();
+            sqrt();
+            Even();
+            nnumber();
+            table();
+
+            prime();
+            fact();
+            fibo();
+            //Main1();
+            Main2();
+
+
+        }
+        //task 2 
+        //it take input from user as their Name and print Hello "Name"
+        
+        static void Name()
+        {
+            Console.WriteLine("Enter Your Name");
+            string name = Console.ReadLine();
+
+            Console.WriteLine("Hello    " + name);
+        }
+        // task 3
+        // this user takes input from the user as number and returns the sum of number 
+        static void sum()
+        {
+            Console.WriteLine("Enter the first number");
+            int num1 = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter the second number");
+            int num2 = Convert.ToInt32(Console.ReadLine());
+            int sum = num1 + num2;
+            Console.WriteLine("The sum of numbers is  " + sum);
+
+        }
+        //task 4
+        //this task takes a number from the user and returns its square root
+        static void sqrt()
+        {
+            Console.WriteLine("Enter the number");
+            int num1 = Convert.ToInt32(Console.ReadLine());
+            int sqrt = num1 * num1;
+            Console.WriteLine("The square root of number is  " + sqrt);
+
+        }
+        // task 5
+        // this task returns all the even numbers from 2 to 100
+        static void Even()
+        {
+            for (int i = 2; i <= 100; i += 2)
+            {
+                Console.WriteLine(i);
+
+            }
+
+
+        }
+        // Task 6
+        // This task takes a number from the user and return sum of numbers from 1 to that number
+        static void nnumber()
+        {
+            Console.WriteLine("Enter a number");
+            int n = Convert.ToInt32(Console.ReadLine());
+            int sum = 0;
+            for (int i = 1; i <= n; i++)
+            {
+                sum += i;
+            }
+            Console.WriteLine("The sum is " + sum);
+        }
+        // Task 7
+        // This task takes a number from the user and returns the able from that number to 12
+        static void table()
+        {
+            Console.WriteLine("Enter a number");
+            int n = Convert.ToInt32(Console.ReadLine());
+            for (int i = n; i <= 12; i++)
+            {
+                for (int j = n; j <= 12; j++)
+                {
+                    Console.Write(i * j + "\t");
+
+                }
+                Console.WriteLine();
+            }
+        }
+        //Task 8
+        // this task takes a number from user and returns prime number from one to number
+        
+
+
+        
+        
+        
+       
+        //task 9
+        // this task takes a number from the user and returns prime numbers upto number
+        static void prime()
+        {
+            Console.WriteLine("Enter a number");
+            string prime = Console.ReadLine();
+            int number = int.Parse(prime); //Converting String Input to Int
+            Console.WriteLine("Prime numbers in this range are");
+            if (number >= 2) // Appending 2 manually to ease the loop
+            {
+                Console.WriteLine(2);
+            }
+            for (int i = 3; i <= (number); i++) //Starting the Loop from 3 since we added 2 manually
+            {
+                bool CheckFlag = true; // using a bool fLAG to check if the number is prime or not
+
+                for (int j = 2; j <= (i - 1); j++) //Using Nested Loop to check each number with in the range
+                {
+                    if (i % j == 0)
+                    {
+                        CheckFlag = false;  //Changing the flag value so that we get our prime numbers only
+                    }
+                }
+
+                if (CheckFlag == true)
+                {
+                    Console.WriteLine(i);
+                }
+            }
+        }
+        // task 10
+        // this code takes a number from the user returns a facrorial of that number 
+        static void fact()
+        {
+            Console.WriteLine("enter a number");
+            int n = Convert.ToInt32(Console.ReadLine());
+            //if (n == 0)
+            //    return 1;
+            //else
+            //    return n;
+            int res = 1;
+            for (int i = 1; i <= n; i++)
+            {
+                res *= i;
+
+
+
+            }
+
+
+            Console.WriteLine("The factorial of number (n) is" + res);
+
+
+        }
+        static void fibo()
+        {
+            Console.WriteLine("Enter a number");
+            int n = Convert.ToInt32(Console.ReadLine());
+            int a = 0, b = 1;
+            Console.WriteLine("fibo series upto" + n);
+            Console.Write(a + " ");
+            for (int i = 2; i <= n; i++)
+            {
+                Console.Write(b + " ");
+                int temp = a;
+                a = b;
+                b = temp + b;
+
+            }
+        }
+        static bool IsPalindrome(string str)
+        {
+            int left = 0;
+            int right = str.Length - 1;
+
+            while (left < right)
+            {
+                if (str[left] != str[right])
+                    return false;
+
+                left++;
+                right--;
+            }
+
+            return true;
+        }
+
+        static void Main2()
+        {
+            Console.WriteLine("Enter a string:");
+            string input = Console.ReadLine();
+
+            bool isPalindrome = IsPalindrome(input);
+
+            Console.WriteLine(isPalindrome ? "The string is a palindrome." : "The string is not a palindrome.");
+        }
+    }
+}
+
+

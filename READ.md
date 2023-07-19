@@ -117,3 +117,6 @@ namespace TextFileComparator
         }
     }
 }
+
+//The program '[4448] practice.exe' has exited with code 0 (0x0).
+index out of range as well

@@ -1,0 +1,200 @@
+using System;
+using System.Collections.Generic;
+
+namespace TextAnalyzer
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter a sentence:");
+            string sentence = Console.ReadLine();
+
+            // 1) Word Frequency Analysis
+            Dictionary<string, int> wordFreq = WordFrequencyAnalysis(sentence);
+            Console.WriteLine("\nWord Frequency Analysis:");
+            foreach (var pair in wordFreq)
+            {
+                Console.WriteLine($"\"{pair.Key}\": {pair.Value}");
+            }
+
+            // 2) Sentence Maker
+            Console.WriteLine("\nEnter a number N:");
+            int numSentences = int.Parse(Console.ReadLine());
+            List<string> sentences = SentenceMaker(sentence, numSentences);
+            Console.WriteLine("\nGenerated Sentences:");
+            for (int i = 0; i < sentences.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {sentences[i]}");
+            }
+
+            // 3) Longest and Shortest Word Finder
+            List<string> longestWords, shortestWords;
+            LongestShortestWordFinder(sentence, out longestWords, out shortestWords);
+            Console.WriteLine("\nLongest word(s):");
+            foreach (string word in longestWords)
+            {
+                Console.WriteLine($"\"{word}\"");
+            }
+            Console.WriteLine("\nShortest word(s):");
+            foreach (string word in shortestWords)
+            {
+                Console.WriteLine($"\"{word}\"");
+            }
+
+            // 4) Word Search
+            Console.WriteLine("\nEnter a word to search:");
+            string searchWord = Console.ReadLine();
+            int wordCount = WordSearch(sentence, searchWord);
+            Console.WriteLine($"\nWord Search:\nThe word \"{searchWord}\" appears {wordCount} time(s) in the sentence.");
+
+            // 5) Palindrome Detector
+            List<string> palindromicWords = PalindromeDetector(sentence);
+            Console.WriteLine("\nPalindrome Detector:");
+            if (palindromicWords.Count > 0)
+            {
+                foreach (string word in palindromicWords)
+                {
+                    Console.WriteLine($"\"{word}\"");
+                }
+            }
+            else
+            {
+                Console.WriteLine("There are no palindromic words in the sentence.");
+            }
+
+            // 6) Vowel/Consonant Counter
+            Dictionary<string, (int vowels, int consonants)> countResult = VowelConsonantCounter(sentence);
+            Console.WriteLine("\nVowel/Consonant Counter:");
+            foreach (var pair in countResult)
+            {
+                Console.WriteLine($"\"{pair.Key}\": {pair.Value.vowels} vowel(s) and {pair.Value.consonants} consonant(s)");
+            }
+
+            Console.ReadLine();
+        }
+
+        static Dictionary<string, int> WordFrequencyAnalysis(string sentence)
+        {
+            Dictionary<string, int> wordFreq = new Dictionary<string, int>();
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string word in words)
+            {
+                if (wordFreq.ContainsKey(word))
+                    wordFreq[word]++;
+                else
+                    wordFreq[word] = 1;
+            }
+            return wordFreq;
+        }
+
+        static List<string> SentenceMaker(string sentence, int numSentences)
+        {
+            List<string> sentences = new List<string>();
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            Random random = new Random();
+            for (int i = 0; i < numSentences; i++)
+            {
+                string newSentence = "";
+                for (int j = 0; j < 5; j++)
+                {
+                    int randomIndex = random.Next(words.Length);
+                    newSentence += words[randomIndex] + " ";
+                }
+                sentences.Add(newSentence.Trim());
+            }
+            return sentences;
+        }
+
+        static void LongestShortestWordFinder(string sentence, out List<string> longestWords, out List<string> shortestWords)
+        {
+            longestWords = new List<string>();
+            shortestWords = new List<string>();
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            int maxLength = 0;
+            int minLength = int.MaxValue;
+            foreach (string word in words)
+            {
+                int length = word.Length;
+                if (length > maxLength)
+                {
+                    maxLength = length;
+                    longestWords.Clear();
+                    longestWords.Add(word);
+                }
+                else if (length == maxLength)
+                {
+                    longestWords.Add(word);
+                }
+                if (length < minLength)
+                {
+                    minLength = length;
+                    shortestWords.Clear();
+                    shortestWords.Add(word);
+                }
+                else if (length == minLength)
+                {
+                    shortestWords.Add(word);
+                }
+            }
+        }
+
+        static int WordSearch(string sentence, string word)
+        {
+            int count = 0;
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string w in words)
+            {
+                if (string.Equals(w, word, StringComparison.OrdinalIgnoreCase))
+                    count++;
+            }
+            return count;
+        }
+
+        static List<string> PalindromeDetector(string sentence)
+        {
+            List<string> palindromicWords = new List<string>();
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string word in words)
+            {
+                bool isPalindrome = true;
+                int left = 0;
+                int right = word.Length - 1;
+                while (left < right)
+                {
+                    if (char.ToLower(word[left]) != char.ToLower(word[right]))
+                    {
+                        isPalindrome = false;
+                        break;
+                    }
+                    left++;
+                    right--;
+                }
+                if (isPalindrome)
+                    palindromicWords.Add(word);
+            }
+            return palindromicWords;
+        }
+
+        static Dictionary<string, (int vowels, int consonants)> VowelConsonantCounter(string sentence)
+        {
+            char[] vowels = { 'a', 'e', 'i', 'o', 'u' };
+            Dictionary<string, (int vowels, int consonants)> countResult = new Dictionary<string, (int vowels, int consonants)>();
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string word in words)
+            {
+                int vowelCount = 0;
+                int consonantCount = 0;
+                foreach (char c in word.ToLower())
+                {
+                    if (vowels.Contains(c))
+                        vowelCount++;
+                    else if (char.IsLetter(c))
+                        consonantCount++;
+                }
+                countResult[word] = (vowelCount, consonantCount);
+            }
+            return countResult;
+        }
+    }
+}

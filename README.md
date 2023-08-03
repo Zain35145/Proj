@@ -92,6 +92,9 @@ namespace TextFileComparator
                     }
                 }
                 else if (i < file1Lines.Length)
+
+
+                
                 {
                     Console.WriteLine(file1Lines[i]);
                 }

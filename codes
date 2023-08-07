@@ -1,0 +1,179 @@
+Task 3
+
+import java.util.Scanner;
+
+public class LongestPalindrome {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String inputString = scanner.nextLine();
+
+        String longestPalindrome = findLongestPalindrome(inputString);
+        System.out.println("Longest palindrome: " + longestPalindrome);
+    }
+
+    public static String findLongestPalindrome(String inputString) {
+        String longestPalindrome = "";
+        for (int i = 0; i < inputString.length(); i++) {
+            for (int j = i + 1; j <= inputString.length(); j++) {
+                String substring = inputString.substring(i, j);
+                if (isPalindrome(substring) && substring.length() > longestPalindrome.length()) {
+                    longestPalindrome = substring;
+                }
+            }
+        }
+        return longestPalindrome;
+    }
+
+    public static boolean isPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
+
+
+// Task 2
+import java.util.Scanner;
+
+public class CountAlphabetOccurrences {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a string of alphabets: ");
+        String inputString = scanner.nextLine();
+
+        int[] occurrences = new int[26]; // Assuming input contains only lowercase letters
+
+        for (char c : inputString.toCharArray()) {
+            if (Character.isLetter(c)) {
+                char lowercaseChar = Character.toLowerCase(c);
+                occurrences[lowercaseChar - 'a']++;
+            }
+        }
+
+        int maxOccurrence = 0;
+        for (int count : occurrences) {
+            if (count > maxOccurrence) {
+                maxOccurrence = count;
+            }
+        }
+
+        System.out.println("Occurrences of all alphabets:");
+        for (char c = 'a'; c <= 'z'; c++) {
+            int count = occurrences[c - 'a'];
+            if (count > 0) {
+                System.out.println(c + ": " + count);
+            }
+        }
+
+        System.out.print("Alphabet(s) with maximum occurrence: ");
+        for (char c = 'a'; c <= 'z'; c++) {
+            if (occurrences[c - 'a'] == maxOccurrence) {
+                System.out.print(c + " ");
+            }
+        }
+    }
+}
+
+
+// Task 1
+
+import java.util.Scanner;
+
+public class AbbreviateFullName {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your full name: ");
+        String fullName = scanner.nextLine();
+
+        String abbreviation = getAbbreviatedName(fullName);
+        System.out.println("Abbreviated name: " + abbreviation);
+    }
+
+    public static String getAbbreviatedName(String fullName) {
+        StringBuilder abbreviation = new StringBuilder();
+
+        int firstNameEndIndex = fullName.indexOf(' ');
+        abbreviation.append(fullName.charAt(0)).append('.');
+
+        int lastNameStartIndex = fullName.lastIndexOf(' ') + 1;
+        String lastName = fullName.substring(lastNameStartIndex);
+
+        for (int i = firstNameEndIndex + 1; i < lastNameStartIndex - 1; i++) {
+            if (fullName.charAt(i) == ' ') {
+                abbreviation.append(fullName.charAt(i + 1)).append('.');
+            }
+        }
+
+        abbreviation.append(lastName);
+        return abbreviation.toString();
+    }
+}
+
+
+// task 1
+import java.util.Random;
+import java.util.Scanner;
+
+public class GuessTheNumberGame {
+    public static void main(String[] args) {
+        guessTheNumber();
+    }
+
+    public static void guessTheNumber() {
+        Random random = new Random();
+        int generatedNumber = random.nextInt(100) + 1;
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.print("Guess a number between 1 and 100: ");
+            int userGuess = scanner.nextInt();
+
+            if (userGuess > generatedNumber) {
+                System.out.println("The number is too large.");
+            } else if (userGuess < generatedNumber) {
+                System.out.println("The number is too small.");
+            } else {
+                System.out.println("Correct Number!");
+                break;
+            }
+        }
+
+        System.out.println("The number that was randomly generated is: " + generatedNumber);
+    }
+}
+
+
+// task 5
+
+import java.util.Scanner;
+
+public class RemoveDuplicateCharacters {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String inputString = scanner.nextLine();
+
+        String resultString = removeDuplicates(inputString);
+        System.out.println("String with duplicate characters removed: " + resultString);
+    }
+
+    public static String removeDuplicates(String inputString) {
+        StringBuilder uniqueChars = new StringBuilder();
+        for (int i = 0; i < inputString.length(); i++) {
+            char currentChar = inputString.charAt(i);
+            if (uniqueChars.indexOf(String.valueOf(currentChar)) == -1) {
+                uniqueChars.append(currentChar);
+            }
+        }
+        return uniqueChars.toString();
+    }
+}

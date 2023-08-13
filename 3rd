@@ -1,0 +1,306 @@
+
+
+
+
+
+
+
+package assign2;
+
+import java.time.Duration;
+import java.util.List;
+
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class task2{
+
+	public static void main(String[] args) {
+		
+		// TODO Auto-generated method stub
+		WebDriverManager.chromedriver().setup();
+
+
+
+        // Create a new ChromeDriver instance
+        ChromeDriver driver = new ChromeDriver();
+
+
+        // Open Google in the browser
+        driver.get("https://omayo.blogspot.in/");
+
+        // Get the page title
+        //String pageTitle = driver.getTitle()s;
+
+		WebElement text_field_1=driver.findElement(By.xpath("//textarea[@id='ta1']"));
+		text_field_1.clear();
+		text_field_1.sendKeys("Zain is resilient !");
+		
+		
+		String gettext=text_field_1.getAttribute("value");
+	
+		if (gettext.equals("Zain is resilient !"))
+		{
+			System.out.print("test passed \n");
+		}
+		else
+		{
+			System.out.print("test failed \n");
+		}
+		
+		
+		
+
+		WebElement text_field_2 = driver.findElement(By.xpath("//div[@id='HTML11']//div[@class='widget-content']//textarea"));
+		text_field_2.getText();
+		//String written_text= text_field_2.getText().toString();
+		//System.out.print(written_text + "\t" + "\n");
+		text_field_2.clear();
+		text_field_2.sendKeys("Zain is unappologetically opinionated !");
+		
+String text_get_2=text_field_2.getAttribute("value");
+		
+		if (text_get_2.equals("Zain is unappologetically opinionated !"))
+		{
+			System.out.print("test passed\n");
+		}
+		else
+		{
+			System.out.print("test failed");
+			
+		}
+		
+		
+		WebElement field_username = driver.findElement(By.xpath("//form[@name='form1']//input[@type='text']"));
+		field_username.sendKeys("Zain-Ul-Hassan");
+		WebElement field_password = driver.findElement(By.xpath("//form[@name='form1']//input[@type='password']"));
+		field_password.sendKeys("12345Zain");
+		WebElement login_button = driver.findElement(By.xpath("//form[@name='form1']//button[@type='button']"));
+		login_button.click();
+		driver.switchTo().frame("iframe1");
+		driver.switchTo().defaultContent();
+		driver.switchTo().frame("iframe2");
+		driver.switchTo().defaultContent();
+		WebElement user_name = driver.findElement(By.xpath("//form[@name='login']//input[@name='userid']"));
+	    user_name.sendKeys("Zain-Ul-Hassan");
+	    WebElement password_ = driver.findElement(By.xpath("//form[@name='login']//input[@name='pswrd']"));
+	    password_.sendKeys("12345Zain");
+	    WebElement login_2 = driver.findElement(By.xpath("//form[@name='login']//input[@value='Login']"));
+	    login_2.click();
+	       
+	    driver.switchTo().alert().accept();
+	    
+	     WebElement table = driver.findElement(By.xpath("//table[contains(@id,'table')]")); 
+	     
+        // Get all rows within the table
+	     
+	     List<WebElement> rows1 = table.findElements(By.tagName("thead"));
+	        
+
+         // Iterate through rows
+     for (WebElement row1 : rows1) {
+         // Get all cells within the row
+         List<WebElement> cells1 = row1.findElements(By.tagName("th"));
+
+         // Iterate through cells
+
+         for (WebElement cell1 : cells1) {
+             // Print cell text
+             System.out.print(cell1.getText() + "\t");
+         }
+
+         System.out.println(); // Move to the next line for the next row
+     }
+	     
+
+        List<WebElement> rows = table.findElements(By.tagName("tr"));
+        
+
+            // Iterate through rows
+        for (WebElement row : rows) {
+        	
+            // Get all cells within the row
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+
+            // Iterate through cells
+
+            for (WebElement cell : cells) {
+                // Print cell text
+                System.out.print(cell.getText() + "\t");
+                
+                
+            }
+
+            
+            System.out.println(); // Move to the next line for the next row
+            
+        }
+        WebElement multis = driver.findElement(By.xpath("//select[contains(@id,'multiselect')]"));
+        Select multi=new Select(multis);
+        multi.selectByVisibleText("Hyundai");
+        WebElement fstdd = driver.findElement(By.xpath("//select[contains(@id,'drop')]"));
+        Select select1=new Select(fstdd);
+       select1.selectByVisibleText("doc 3");
+       WebElement  pretext = driver.findElement(By.xpath("//div[@class='widget-content']//input[@name='fname']"));
+       pretext.clear();
+       pretext.sendKeys("Hello World!");
+       WebElement clickE = driver.findElement(By.xpath("//div[@class='widget HTML']//div[@class='widget-content']//button[@id='but2' and text()='Button2']"));
+       clickE.click();
+       
+//       WebElement click1= driver.findElement(By.xpath("//div[@class='widget-content']//button[contains(@id, 'but')]"));
+//       click1.click();
+//       WebElement click2 = driver.findElement(By.xpath("//div[@class='widget-content']//button[contains(@id, 'but')]"));
+//       click2.click();
+//       
+//       WebElement click3 = driver.findElement(By.xpath("//div[@class='widget-content']//button[contains(@id, 'but')]"));
+//       click3.click();
+//       
+//       
+       
+       List<WebElement> allbuttons=driver.findElements(By.xpath("//div[@class='widget-content']//button[contains(@name, 'samename')]"));
+       int[] indices = {0,2};
+       for (int index : indices) {
+    	   if(index >= 0 && index < allbuttons.size()) {
+    		   allbuttons.get(index).click();
+    	   }
+    	   
+       }
+       ////button[@ondblclick='dblclickAlert()']
+//       WebDriver driven = new ChromeDriver();
+//       WebDriverWait wait = new WebDriverWait(driven,10);
+//       wait.until(ExpectedConditions.alertIsPresent());
+//       driver.switchTo().alert().accept();
+       
+       
+       WebElement text_with_popup=driver.findElement(By.xpath("//input[@onclick='displayAlert()' and @value='ClickAfterTextDissappears']"));
+		text_with_popup.click();
+		driver.switchTo().alert().accept();	
+		
+		
+		WebElement textbut =driver.findElement(By.linkText("Open a popup window"));
+		textbut.click();
+		
+		String windowmain = driver.getWindowHandle();
+		for(String handle : driver.getWindowHandles()) {
+			if(!handle.equals(windowmain)) {
+				driver.switchTo().window(handle);
+				break;
+			}
+		}
+		
+		String link = driver.findElement(By.tagName("h2")).getText();
+
+		System.out.println("Page Text:"+ link);
+		driver.close();
+		driver.switchTo().window(windowmain);
+		
+		
+		WebElement radiomale= driver.findElement(By.id("radio1"));
+		radiomale.click();
+		
+		
+		WebElement textbut2 = driver.findElement(By.id("alert1"));
+		textbut2.click();
+		driver.switchTo().alert().accept();	
+		WebElement textofb2 = driver.findElement(By.cssSelector("input[value='ReadThisText'"));
+		String valueoft2 = textofb2.getAttribute("value");
+		System.out.println("Text box value: \t"+ valueoft2);
+		
+		WebElement PrompBut = driver.findElement(By.id("prompt")); 
+          PrompBut.click();
+          
+          driver.switchTo().alert().sendKeys("Zain-Ul-Hassan");
+          driver.switchTo().alert().accept(); 
+          
+        WebElement ConfirmBut = driver.findElement(By.id("confirm")); 
+        ConfirmBut.click();
+         driver.switchTo().alert().accept(); 
+//         WebElement textBox1 = driver.findElement(By.cssSelector("input.classone:nth-of-type(1)"));
+//         WebElement textBox2 = driver.findElement(By.cssSelector("input.classone:nth-of-type(1)"));
+//         textBox1.sendKeys("Text Box 1 Input");
+//         textBox2.sendKeys("Text Box 2 Input");
+         
+         WebElement findtextbox=driver.findElement(By.xpath("//input[@class='classone']"));
+			findtextbox.sendKeys("Heyooooo");
+		WebElement findtextbox2=driver.findElement(By.xpath("//input[@class='classone']//following::div//child::input[@class='classone']"));
+			findtextbox2.sendKeys("Zain here !");
+
+      
+			
+			
+			WebElement choosethebag=driver.findElement(By.xpath("//input[@type='checkbox' and @value='Bag']"));
+			choosethebag.click();
+			WebElement choosethebook=driver.findElement(By.xpath("//input[@type='checkbox' and @value='Book']"));
+			choosethebook.click();
+			
+
+		WebElement tryit = driver.findElement(By.xpath("//div[@class='widget-content']//button[ text()= 'Try it']"));
+		tryit.click();
+		WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5));
+		WebElement mybut = driver.findElement(By.id("myBtn"));
+		wait.until(ExpectedConditions.attributeToBe(mybut, "disabled", "true"));
+		if(mybut.getAttribute("disabled").equals("true")) {
+			System.out.print("My button is disabled");
+			
+		} else {
+			
+			System.out.print("My button is enabled");
+		}
+		
+		WebElement doubleclick= driver.findElement(By.xpath("//button[@ondblclick='dblclickAlert()']"));
+		////*[@id="HTML46"]/div[1]/button
+		Actions act = new Actions(driver);
+		act.doubleClick(doubleclick).perform();
+		driver.switchTo().alert().accept();	
+		
+		
+		
+		WebElement checkthis = driver.findElement(By.xpath("//button[@onclick='setTimeout(myFunctionAXD,10000)']"));
+		checkthis.click();
+		
+		WebDriverWait wait1  = new WebDriverWait(driver,Duration.ofSeconds(10));
+	
+		
+		WebElement checkb = driver.findElement(By.xpath("//div[@class='widget-content']//input[@id='dte']"));
+		wait1.until(ExpectedConditions.elementToBeClickable(checkb));
+		checkb.click();
+		//System.out.print("Mr ");
+		
+		
+		
+		
+		WebElement gdd = driver.findElement(By.xpath("//div[@class='dropdown']//button[@onclick='setTimeout(myFunction,3000)']"));
+		gdd.click();
+		//WebElement ddelement= driver.findElement(By.id("myDropdown"));
+		
+		WebDriverWait wait2 = new WebDriverWait(driver, Duration.ofSeconds(5));
+		WebElement facebook = wait2.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='myDropdown']/a[1]")));
+		facebook.click();
+
+//	     Select selectone = new Select(ddelement);
+//		selectone.selectByVisibleText("Facebook");
+//		
+		
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+	}
+}

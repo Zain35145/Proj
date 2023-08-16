@@ -1,0 +1,177 @@
+package Test;
+
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.TestNG;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+import org.testng.xml.XmlSuite;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class CustomerLogin {
+	 WebDriver driver;
+     WebDriverWait wait;
+
+    @BeforeClass
+    public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.get("https://www.globalsqa.com/angularJs-protractor/BankingProject");
+    }
+	
+	
+	  @Test(priority = 1)
+	    public void openCustomerAccount() throws InterruptedException {
+		  Thread.sleep(3000);
+	        WebElement Customerlogin = driver.findElement(By.xpath("//button[text()=\"Customer Login\"]"));
+	        Customerlogin.click();
+	        Thread.sleep(3000);
+
+
+//	        WebElement OpenAccountButton = driver.findElement(By.xpath("//div[@class='border box padT20 ng-scope']//button[@ng-class='btnClass2']"));
+//	        OpenAccountButton.click();
+//	        Thread.sleep(3000);
+
+
+	        WebElement NameCustomer = driver.findElement(By.xpath(" //div[@class='form-group']//select[@id='userSelect']"));
+	        NameCustomer.click();
+	        Thread.sleep(3000);
+	        
+//	        WebElement DropDownCurrency = driver.findElement(By.xpath("//div[@class='form-group']//select[@id='currency']"));
+//	        WebElement ButtonProcess = driver.findElement(By.xpath("//div//button[@type='submit']"));
+
+	       
+
+	        WebElement SelectOneName = driver.findElement(By.xpath("//div//option[@value='1']"));
+	        SelectOneName.click();
+	        Thread.sleep(3000);
+
+
+//	        DropdownCustomer.click();
+//	        Thread.sleep(3000);
+
+	        WebElement presslogin = driver.findElement(By.xpath("//div//button[@class='btn btn-default']"));
+	        presslogin.click();
+	        Thread.sleep(3000);
+	        WebElement pressDeposit = driver.findElement(By.xpath("//div//button[@ng-class='btnClass2']"));
+	        pressDeposit.click();
+	        Thread.sleep(3000);
+	        
+	        WebElement EnterAmount = driver.findElement(By.xpath("//div[@class='form-group']//input"));
+	        EnterAmount.sendKeys("6000");
+	        Thread.sleep(3000);
+	        WebElement pressfinaldepo = driver.findElement(By.xpath("//div//button[@type='submit']"));
+	        pressfinaldepo.click();
+	        Thread.sleep(3000);
+	        
+	        WebElement presswithdraw = driver.findElement(By.xpath("//div//button[@ng-class='btnClass3']"));
+	        presswithdraw.click();
+	        Thread.sleep(3000);
+	        WebElement EnterAmountw = driver.findElement(By.xpath("//div[@class='form-group']//input"));
+	        EnterAmountw.sendKeys("2000");
+	        Thread.sleep(3000);
+	        WebElement pressfinalwith = driver.findElement(By.xpath("//div//button[@type='submit']"));
+	        pressfinalwith.click();
+	        Thread.sleep(3000);
+	        
+	        WebElement presstrans = driver.findElement(By.xpath("//div//button[@ng-class='btnClass1']"));
+	        presstrans.click();
+	        Thread.sleep(3000);
+	        
+//	        WebElement pressstartdate = driver.findElement(By.xpath("//div[@ng-show='showDate']//input[@ng-model='startDate']"));
+//	        pressstartdate.sendKeys("2016-01-01T00:00:00");
+//	        Thread.sleep(3000);
+	        
+//	       
+	        WebElement table = driver.findElement(By.xpath("//table")); 
+		     
+	        // Get all rows within the table
+		     
+		     List<WebElement> rows1 = table.findElements(By.tagName("thead"));
+		        
+
+	         // Iterate through rows
+	     for (WebElement row1 : rows1) {
+	         // Get all cells within the row
+	         List<WebElement> cells1 = row1.findElements(By.tagName("th"));
+
+	         // Iterate through cells
+
+	         for (WebElement cell1 : cells1) {
+	             // Print cell text
+	             System.out.print(cell1.getText() + "\t");
+	         }
+
+	         System.out.println(); // Move to the next line for the next row
+	     }
+		     
+
+	        List<WebElement> rows = table.findElements(By.tagName("tr"));
+	        
+
+	            // Iterate through rows
+	        for (WebElement row : rows) {
+	        	
+	            // Get all cells within the row
+	            List<WebElement> cells = row.findElements(By.tagName("td"));
+
+	            // Iterate through cells
+
+	            for (WebElement cell : cells) {
+	                // Print cell text
+	                System.out.print(cell.getText() + "\t");
+	                
+	                
+	            }
+
+	            
+	            System.out.println(); // Move to the next line for the next row
+	            
+	        }
+	        
+	        WebElement reset = driver.findElement(By.xpath("//button[@ng-click='reset()']"));
+	        reset.click();
+	        Thread.sleep(3000);
+	        WebElement logout = driver.findElement(By.xpath("//button[@ng-show='logout']"));
+	        logout.click();
+	        Thread.sleep(3000);
+	        WebElement home = driver.findElement(By.xpath("//button[@class='btn home']"));
+	        home.click();
+	        Thread.sleep(3000);
+	        WebElement ButtonManager = driver.findElement(By.xpath("//button[text()=\"Bank Manager Login\"]"));
+	        ButtonManager.click();
+	        ////div[@class='center']//button[@ng-click='manager()']
+	        Thread.sleep(3000);
+	        WebElement CustomerDel = driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/div/div/table/tbody/tr[1]/td[5]/button"));
+	        CustomerDel.click();
+	        Thread.sleep(3000);
+	        
+	        
+
+
+
+//	        ButtonProcess.click();
+//	        Thread.sleep(3000);
+	        ////div//button[@ng-class='btnClass1'] tran
+
+
+//	        wait.until(ExpectedConditions.alertIsPresent());
+//	        driver.switchTo().alert().accept();
+	    }
+
+	    @AfterClass
+	    public void tearDown() {
+	        driver.quit();
+	    }
+
+}
